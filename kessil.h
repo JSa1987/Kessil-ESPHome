@@ -1,3 +1,11 @@
+/*
+Kessil-ESPHome v1.0 by Josto Salis
+
+ESPHome Light Component for Kassil lights. This component allows to control Kessil lights from Home Assistant via an ESPHome controller.
+The component has been tested with A160 lights, but should work also with A80 and A360 lights.
+
+https://github.com/JSa1987/Kessil-ESPHome
+*/
 #pragma once
 
 #include "esphome.h"
