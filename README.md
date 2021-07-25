@@ -2,14 +2,14 @@
 ESPHome Light Component for Kassil lights. This component allows to control Kessil lights from Home Assistant via an ESPHome controller. The component has been tested with A160 lights, but should work also with A80 and A360 lights.
 
 ## Circuit
-The brightness and color of Kessil lights are controlled with by two 0-10v analogue signals.
+Brightness and color of Kessil lights are controlled by two 0-10v analogue signals.
 ![image](https://user-images.githubusercontent.com/62815008/126909597-28b7f3ed-1639-4644-8b0d-72198e0200e0.png)
 
 A transitor and a low pass filter can be used to convert the 0-3.3v PWM signal from the controller (generated directly by the ESP8266 or by a PCA9685) into the 0-10v analogue needed for the Kessil light:
 ![image](https://user-images.githubusercontent.com/62815008/126909824-d7057c6c-7d81-45c9-9d99-39e8041a71b3.png)
 
 ## Configuration
-In the ESPHome .yaml configuration file custom light needs to be defined refering to two PWM outputs:
+In the ESPHome .yaml configuration file a custom light needs to be defined refering to two PWM outputs:
 ```
 light:
   - platform: custom
@@ -49,7 +49,7 @@ sensor:
 ```
 
 ## Home Assistant setup
-The Light Entity Card from ljmerza (https://github.com/ljmerza/light-entity-card) can be used in the Home Assistant to control the Kessil light:
+The Light Entity Card from ljmerza (https://github.com/ljmerza/light-entity-card) can be used in the Home Assistant to manually control the Kessil light:
 
 ![image](https://user-images.githubusercontent.com/62815008/126910090-54548022-78fe-4fba-ac3f-d53b1315bc70.png)
 
