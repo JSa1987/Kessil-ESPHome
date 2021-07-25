@@ -1,0 +1,74 @@
+esphome:
+  name: reef_tank
+  comment: Reef Tank Contoller
+  platform: ESP8266
+  board: d1_mini
+  includes:
+    - kessil.h
+
+wifi:
+  ssid: "SSID"
+  password: "SuperSecrete_Password"
+  manual_ip:
+    static_ip: 192.168.x.x
+    gateway: 192.168.x.x
+    subnet: 255.255.255.0
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Reef Tank Fallback Hotspot"
+    password: "SuperSecrete_Password2"
+
+captive_portal:
+
+# Enable logging
+logger:
+  level: DEBUG
+  baud_rate: 9600
+
+# Enable Home Assistant API
+api:
+  password: "SuperSecrete_Password3"
+
+ota:
+  password: "SuperSecrete_Password4"
+
+sensor:
+  - platform: template
+    name: "Reef Tank - Light Brightness"
+    id: reef_tank_light_brightness
+    update_interval: 20s
+    accuracy_decimals: 0
+    unit_of_measurement: "%"
+    icon: "mdi:weather-sunny"
+    lambda: |-
+      return (int(id(reef_tank_light).current_values.get_brightness() * 100));
+  - platform: template
+    name: "Reef Tank - Light Color"
+    id: reef_tank_light_color
+    update_interval: 20s
+    accuracy_decimals: 0
+    unit_of_measurement: "%"
+    icon: "mdi:palette-outline"
+    lambda: |-
+      return (int(id(reef_tank_light).current_values.get_white() * 100));
+
+light:
+  - platform: custom
+    lambda: |-
+      auto kessil_light = new KessilLight(id(reef_tank_light_brightness_pwm), id(reef_tank_light_color_pwm));
+      App.register_component(kessil_light);
+      return {kessil_light};
+    lights:
+      - name: "Reef Tank - Light"
+        id: reef_tank_light
+        gamma_correct: 1
+
+output:
+  - platform: esp8266_pwm
+    id: reef_tank_light_brightness_pwm
+    pin: D5
+    inverted: true
+  - platform: esp8266_pwm
+    id: reef_tank_light_color_pwm
+    pin: D6
+    inverted: true
