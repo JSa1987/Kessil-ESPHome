@@ -1,0 +1,95 @@
+esphome:
+  name: reef_tank
+  comment: Reef Tank Contoller
+  platform: ESP8266
+  board: d1_mini
+
+external_components:
+  # Import the Kessil light component from GitHub
+  - source:
+      type: git
+      url: https://github.com/JSa1987/Kessil-ESPHome
+      ref: main
+    components: [ kessil ]
+
+wifi:
+  ssid: "SSID"
+  password: "SuperSecrete_Password"
+  manual_ip:
+    static_ip: 192.168.x.x
+    gateway: 192.168.x.x
+    subnet: 255.255.255.0
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Reef Tank Fallback Hotspot"
+    password: "SuperSecrete_Password2"
+
+captive_portal:
+
+# Enable logging
+logger:
+  level: DEBUG
+  baud_rate: 9600
+
+# Enable Home Assistant API
+api:
+  password: "SuperSecrete_Password3"
+
+ota:
+  password: "SuperSecrete_Password4"
+
+#In case you use a PCA9685 uncomment the following lines
+#i2c:
+#  sda: D2
+#  scl: D1
+#  scan: True
+#  id: I2C_bus
+#pca9685:
+#  frequency: 1000
+
+sensor:
+  - platform: template
+    name: "Reef Tank - Light Brightness"
+    id: reef_tank_light_brightness
+    update_interval: 20s
+    accuracy_decimals: 0
+    unit_of_measurement: "%"
+    icon: "mdi:weather-sunny"
+    lambda: |-
+      return (int(id(reef_tank_light).current_values.get_brightness() * 100));
+  - platform: template
+    name: "Reef Tank - Light Color"
+    id: reef_tank_light_color
+    update_interval: 20s
+    accuracy_decimals: 0
+    unit_of_measurement: "K"
+    icon: "mdi:palette-outline"
+    lambda: |-
+      return (int(1000000 / id(reef_tank_light).current_values.get_color_temperature() ));
+
+light:
+  - platform: kessil
+    id: reef_tank_light
+    name: "Reef Tank - Light"
+    brightness: reef_tank_light_brightness_pwm
+    color_temperature: reef_tank_light_color_pwm
+#    cold_white_color_temperature: 20000 K   #This is used only to set the cold temperature limit for the color sensor. Default value is 20,000 K, uncoment the line to chnage it.
+#    warm_white_color_temperature: 10000 K   #This is used only to set the warm temperature limit for the color sensor. Default value is 10,000 K, uncoment the line to chnage it.
+
+output:
+  - platform: esp8266_pwm
+    id: reef_tank_light_brightness_pwm
+    pin: D5
+    inverted: true
+  - platform: esp8266_pwm
+    id: reef_tank_light_color_pwm
+    pin: D6
+
+#output:
+#  - platform: pca9685
+#    id: reef_tank_light_brightness_pwm
+#    channel: 0
+#    inverted: true
+#  - platform: pca9685
+#    id: reef_tank_light_color_pwm
+#    channel: 1
