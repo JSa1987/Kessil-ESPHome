@@ -1,6 +1,5 @@
 # Kessil-ESPHome
 ESPHome Light Component for Kassil lights. This component allows to control Kessil lights from Home Assistant via an ESPHome controller. The component has been tested with A160 lights, but should work also with A80 and A360 lights.
-The ESPHome component is based on the work from SSIEB (https://github.com/ssieb/custom_components).
 
 ## Circuit
 Brightness and color of Kessil lights are controlled by two 0-10v analogue signals.
@@ -81,3 +80,6 @@ brightness_icon: weather-sunny
 white_icon: file-word-box
 temperature_icon: thermometer
 ```
+
+## Special Thanks
+The ESPHome component is based on the work from SSIEB (https://github.com/ssieb/custom_components).
